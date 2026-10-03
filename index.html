@@ -4,27 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hotarego Games — cozy indie mobile games</title>
-  <meta name="description" content="Hotarego Games is an indie studio making cozy puzzle games for Android.">
+  <meta name="description" content="Hotarego Games is an indie studio making cozy puzzle games for Android, named after Hotarego in Hormozgan, Iran.">
   <meta property="og:title" content="Hotarego Games">
-  <meta property="og:description" content="Cozy indie mobile games, lit by a firefly.">
+  <meta property="og:description" content="Cozy indie mobile games from a studio named after Hotarego, Hormozgan.">
   <meta property="og:image" content="https://hotarego.github.io/assets/avatar.jpg">
-  <meta name="theme-color" content="#141B3A">
-  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <meta name="theme-color" content="#1B262C">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="sky" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
 
   <header class="hero">
-    <img class="hero__avatar" src="assets/avatar.jpg" alt="Hotarego Games firefly logo" width="160" height="160">
+    <img class="hero__logo" src="assets/logo.svg" alt="Hotarego Games logo: mountains, date palms, village houses and a stream" width="168" height="168">
     <h1 class="hero__title">Hotarego Games</h1>
-    <p class="hero__tagline">Cozy puzzle games for Android, made with care by a small indie studio.</p>
+    <p class="hero__native"><span lang="fa" dir="rtl">هوتارگو</span></p>
+    <p class="hero__tagline">Cozy puzzle games for Android, from a small indie studio named after Hotarego in Hormozgan, Iran.</p>
     <nav class="hero__links" aria-label="Studio links">
       <a class="button button--primary" href="#games">See the games</a>
       <a class="button" href="https://github.com/hotarego" rel="me">GitHub</a>
     </nav>
   </header>
+
+  <svg class="ridge" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="ridge-fade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="currentColor"/>
+        <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path fill="url(#ridge-fade)" d="M0 80 L0 52 L70 30 L110 42 L180 12 L240 38 L300 26 L360 48 L430 18 L500 40 L560 30 L630 50 L700 16 L770 42 L830 28 L900 46 L960 20 L1030 44 L1090 32 L1150 46 L1200 34 L1200 80 Z"/>
+  </svg>
 
   <main>
     <section id="games" class="games" aria-labelledby="games-title">
@@ -39,10 +51,15 @@
     </section>
 
     <section class="about" aria-labelledby="about-title">
-      <h2 id="about-title">About the studio</h2>
+      <h2 id="about-title">Why “Hotarego”?</h2>
       <p>
-        Hotaru means firefly. Like fireflies on a summer night, our games aim to be small, warm and
-        a little bit magical: easy to pick up, satisfying to master, and respectful of your time.
+        Hotarego (<span lang="fa" dir="rtl">هوتارگو</span>) is the local name of a place in the
+        north-east of Hormozgan province, Iran. Its Persian name is Ābtārikān
+        (<span lang="fa" dir="rtl">آبتاریکان</span>). We named our studio after it.
+      </p>
+      <p>
+        We make small, handcrafted games that are easy to pick up, satisfying to master and made
+        to be enjoyed at your own pace.
       </p>
       <ul class="about__values">
         <li>Fair, transparent game economies</li>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Hotarego Games</title>
+  <defs>
+    <clipPath id="badge"><circle cx="256" cy="256" r="230"/></clipPath>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F3B562"/>
+      <stop offset="0.55" stop-color="#F6D29A"/>
+      <stop offset="1" stop-color="#F9E6C4"/>
+    </linearGradient>
+    <linearGradient id="farRange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8A273"/>
+      <stop offset="1" stop-color="#D98B5E"/>
+    </linearGradient>
+    <linearGradient id="nearRange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C8643B"/>
+      <stop offset="1" stop-color="#A84F2E"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E7A86"/>
+      <stop offset="1" stop-color="#1F5560"/>
+    </linearGradient>
+    <path id="frond" d="M0 0 Q 26 -20 60 -4 Q 30 -7 0 0 Z"/>
+    <g id="crown">
+      <use href="#frond" transform="rotate(-150)" fill="#5F9446"/>
+      <use href="#frond" transform="rotate(-30)" fill="#5F9446"/>
+      <use href="#frond" transform="rotate(195)" fill="#4F7D3A"/>
+      <use href="#frond" transform="rotate(-15)" fill="#4F7D3A"/>
+      <use href="#frond" transform="rotate(15)" fill="#4F7D3A"/>
+      <use href="#frond" transform="rotate(165)" fill="#4F7D3A"/>
+      <use href="#frond" transform="rotate(50)" fill="#436B31"/>
+      <use href="#frond" transform="rotate(130)" fill="#436B31"/>
+    </g>
+  </defs>
+
+  <rect width="512" height="512" fill="#1B262C"/>
+
+  <g clip-path="url(#badge)">
+    <rect width="512" height="512" fill="url(#sky)"/>
+    <circle cx="340" cy="168" r="34" fill="#FFF0CC"/>
+
+    <path d="M20 290 L60 250 L78 262 L110 220 L128 232 L150 205 L176 228 L200 186 L222 204 L246 178 L270 206 L296 192 L322 222 L350 196 L372 214 L400 182 L428 210 L452 198 L500 236 L500 340 L20 340 Z" fill="url(#farRange)"/>
+
+    <path d="M20 330 L50 300 L66 308 L96 276 L118 292 L140 270 L168 296 L196 262 L224 290 L250 280 L276 300 L304 268 L330 292 L356 280 L384 304 L414 272 L440 290 L470 278 L500 296 L500 366 L20 366 Z" fill="url(#nearRange)"/>
+    <path d="M30 336 Q 140 314 250 330 T 500 324 M40 350 Q 190 332 320 346 T 500 342" fill="none" stroke="#D9774A" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+
+    <rect y="356" width="512" height="160" fill="#E9C690"/>
+
+    <path d="M292 356 C 280 382, 242 396, 236 420 C 228 456, 268 480, 260 516 L 334 516 C 338 480, 294 456, 302 426 C 308 402, 320 382, 310 356 Z" fill="url(#water)"/>
+    <path d="M301 360 C 291 387, 256 401, 252 425 C 247 456, 289 480, 293 512" fill="none" stroke="#5FB0B8" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+
+    <g transform="translate(222 292) scale(0.75)">
+      <path d="M-8 110 Q -12 52 0 0" fill="none" stroke="#6B4A2B" stroke-width="9" stroke-linecap="round"/>
+      <use href="#crown"/>
+    </g>
+
+    <rect x="116" y="354" width="78" height="9" fill="#B9824F"/>
+    <rect x="120" y="362" width="70" height="48" fill="#D8A26A"/>
+    <path d="M148 410 L148 390 A 7 7 0 0 1 162 390 L162 410 Z" fill="#6B3B22"/>
+    <path d="M128 384 L128 376 A 5 5 0 0 1 138 376 L138 384 Z" fill="#6B3B22"/>
+
+    <rect x="182" y="371" width="58" height="8" fill="#C38D58"/>
+    <rect x="186" y="378" width="50" height="40" fill="#E4B27C"/>
+    <path d="M204 418 L204 402 A 6 6 0 0 1 216 402 L216 418 Z" fill="#6B3B22"/>
+
+    <rect x="341" y="362" width="66" height="8" fill="#B9824F"/>
+    <rect x="345" y="369" width="58" height="42" fill="#D8A26A"/>
+    <path d="M368 411 L368 393 A 6.5 6.5 0 0 1 381 393 L381 411 Z" fill="#6B3B22"/>
+    <path d="M389 388 L389 381 A 4.5 4.5 0 0 1 398 381 L398 388 Z" fill="#6B3B22"/>
+
+    <g transform="translate(108 318)">
+      <path d="M-12 104 Q -16 52 0 0" fill="none" stroke="#6B4A2B" stroke-width="9" stroke-linecap="round"/>
+      <use href="#crown"/>
+    </g>
+    <g transform="translate(410 328) scale(0.9)">
+      <path d="M12 104 Q 16 52 0 0" fill="none" stroke="#6B4A2B" stroke-width="9" stroke-linecap="round"/>
+      <use href="#crown"/>
+    </g>
+  </g>
+
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#E0A458" stroke-width="10"/>
+</svg>

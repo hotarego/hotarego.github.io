@@ -287,16 +287,6 @@ h2 { font-size: 1.8rem; margin: 0; }
 
 .about p { max-width: 65ch; color: var(--muted); }
 
-.about__values { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
-
-.about__values li {
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(255, 200, 87, 0.12);
-  color: var(--amber);
-  font-weight: 700;
-}
-
 .footer { padding: 24px; text-align: center; color: var(--muted); font-size: 0.9rem; }
 
 .lightbox {

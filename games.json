@@ -7,12 +7,12 @@
         "fa": "خانهٔ رؤیایی"
       },
       "tagline": {
-        "en": "A cozy match-3 renovation adventure.",
-        "fa": "ماجرایی دنج از بازسازی خانه با پازل‌های سه‌تایی."
+        "en": "Solve puzzles, fix up Grandma June's old house.",
+        "fa": "پازل حل کن، خانهٔ قدیمی مادربزرگ را سر و سامان بده."
       },
       "description": {
-        "en": "Solve bright match-3 puzzles to earn stars, then spend them restoring a home room by room. Every level is hand-tuned and seed-deterministic, and the story unfolds as each area comes back to life.",
-        "fa": "پازل‌های رنگارنگ سه‌تایی را حل کنید تا ستاره بگیرید، بعد با آن‌ها خانه را اتاق به اتاق بازسازی کنید. همهٔ مراحل با دقت تنظیم شده‌اند و هر بار دقیقاً یکسان پیش می‌روند، و با جان گرفتن دوبارهٔ هر بخش از خانه، داستان هم جلو می‌رود."
+        "en": "Alex just inherited Grandma June's house on Willow Lane, and the place is a mess. Beat match-3 levels to earn stars, then spend them on the house: fix the door, paint the walls, pick a rug. Every job you finish moves the story along. Meanwhile a developer named Mr. Crane would really like you to sell.",
+        "fa": "الکس خانهٔ مادربزرگ جون را در کوچهٔ بید به ارث برده و خانه حسابی به هم ریخته است. مرحله‌ها را ببرید، ستاره جمع کنید و با آن‌ها به خانه برسید: در را تعمیر کنید، دیوارها را رنگ بزنید، یک فرش انتخاب کنید. هر کاری که تمام شود، داستان یک قدم جلو می‌رود. این وسط یک بساز‌وبفروش به اسم آقای کرین هم خیلی دلش می‌خواهد خانه را بفروشید."
       },
       "status": "in-development",
       "platforms": {
@@ -27,12 +27,12 @@
         "en": [
           "Puzzle",
           "Match-3",
-          "Casual"
+          "Home design"
         ],
         "fa": [
           "پازل",
           "سه‌تایی",
-          "کژوال"
+          "طراحی خانه"
         ]
       },
       "tech": [
@@ -42,16 +42,16 @@
       ],
       "highlights": {
         "en": [
-          "100 handcrafted puzzle levels",
-          "Room-by-room home renovation",
-          "Story chapters between areas",
-          "Boosters: hammer, rocket and shuffle"
+          "100 levels in the first area",
+          "You choose the style of the door, walls, floor and more",
+          "A short story told between levels",
+          "Hammer, rocket and shuffle for when you're stuck"
         ],
         "fa": [
-          "۱۰۰ مرحلهٔ پازل دست‌ساز",
-          "بازسازی خانه، اتاق به اتاق",
-          "فصل‌های داستانی بین بخش‌های خانه",
-          "تقویت‌کننده‌ها: چکش، موشک و درهم‌ریزی"
+          "۱۰۰ مرحله فقط در بخش اول",
+          "شکل در، دیوارها، کف و بقیهٔ اتاق را خودتان انتخاب می‌کنید",
+          "یک داستان کوتاه که بین مرحله‌ها پیش می‌رود",
+          "چکش، موشک و به‌هم‌ریختن برای وقتی که گیر کرده‌اید"
         ]
       },
       "accent": "#E0663A",

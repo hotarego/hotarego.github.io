@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotarego Games — cozy indie mobile games</title>
+  <meta name="description" content="Hotarego Games is an indie studio making cozy puzzle games for Android.">
+  <meta property="og:title" content="Hotarego Games">
+  <meta property="og:description" content="Cozy indie mobile games, lit by a firefly.">
+  <meta property="og:image" content="https://hotarego.github.io/assets/avatar.jpg">
+  <meta name="theme-color" content="#141B3A">
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <header class="hero">
+    <img class="hero__avatar" src="assets/avatar.jpg" alt="Hotarego Games firefly logo" width="160" height="160">
+    <h1 class="hero__title">Hotarego Games</h1>
+    <p class="hero__tagline">Cozy puzzle games for Android, made with care by a small indie studio.</p>
+    <nav class="hero__links" aria-label="Studio links">
+      <a class="button button--primary" href="#games">See the games</a>
+      <a class="button" href="https://github.com/hotarego" rel="me">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="games" class="games" aria-labelledby="games-title">
+      <div class="games__header">
+        <h2 id="games-title">Games</h2>
+        <p class="games__count" id="games-count"></p>
+      </div>
+      <div class="games__list" id="games-list" aria-live="polite">
+        <p class="games__empty">Loading games…</p>
+      </div>
+      <noscript><p class="games__empty">Enable JavaScript to see the game list.</p></noscript>
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+      <h2 id="about-title">About the studio</h2>
+      <p>
+        Hotaru means firefly. Like fireflies on a summer night, our games aim to be small, warm and
+        a little bit magical: easy to pick up, satisfying to master, and respectful of your time.
+      </p>
+      <ul class="about__values">
+        <li>Fair, transparent game economies</li>
+        <li>Handcrafted, tested content</li>
+        <li>Cozy art and calm sound</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year">2026</span> Hotarego Games</p>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot">
+    <form method="dialog"><button class="lightbox__close" aria-label="Close">×</button></form>
+    <img class="lightbox__image" id="lightbox-image" alt="">
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "games": [
+    {
+      "id": "dream-home",
+      "title": "Dream Home",
+      "tagline": "A cozy match-3 renovation adventure.",
+      "description": "Solve bright match-3 puzzles to earn stars, then spend them restoring a home room by room. Every level is hand-tuned and seed-deterministic, and the story unfolds as each area comes back to life.",
+      "status": "in-development",
+      "platforms": [
+        "Android"
+      ],
+      "genres": [
+        "Puzzle",
+        "Match-3",
+        "Casual"
+      ],
+      "tech": [
+        "Kotlin",
+        "Jetpack Compose",
+        "OpenGL ES"
+      ],
+      "highlights": [
+        "100 handcrafted puzzle levels",
+        "Room-by-room home renovation",
+        "Story chapters between areas",
+        "Boosters: hammer, rocket and shuffle"
+      ],
+      "accent": "#E0663A",
+      "links": {},
+      "version": "1.0.0",
+      "updated": "2026-10-03",
+      "screenshots": [
+        "assets/games/dream-home/screenshot-home.jpg",
+        "assets/games/dream-home/screenshot-puzzle.jpg",
+        "assets/games/dream-home/screenshot-levels.jpg"
+      ]
+    }
+  ]
+}

@@ -2,38 +2,74 @@
   "games": [
     {
       "id": "dream-home",
-      "title": "Dream Home",
-      "tagline": "A cozy match-3 renovation adventure.",
-      "description": "Solve bright match-3 puzzles to earn stars, then spend them restoring a home room by room. Every level is hand-tuned and seed-deterministic, and the story unfolds as each area comes back to life.",
+      "title": {
+        "en": "Dream Home",
+        "fa": "خانهٔ رؤیایی"
+      },
+      "tagline": {
+        "en": "A cozy match-3 renovation adventure.",
+        "fa": "ماجرایی دنج از بازسازی خانه با پازل‌های سه‌تایی."
+      },
+      "description": {
+        "en": "Solve bright match-3 puzzles to earn stars, then spend them restoring a home room by room. Every level is hand-tuned and seed-deterministic, and the story unfolds as each area comes back to life.",
+        "fa": "پازل‌های رنگارنگ سه‌تایی را حل کنید تا ستاره بگیرید، بعد با آن‌ها خانه را اتاق به اتاق بازسازی کنید. همهٔ مراحل با دقت تنظیم شده‌اند و هر بار دقیقاً یکسان پیش می‌روند، و با جان گرفتن دوبارهٔ هر بخش از خانه، داستان هم جلو می‌رود."
+      },
       "status": "in-development",
-      "platforms": [
-        "Android"
-      ],
-      "genres": [
-        "Puzzle",
-        "Match-3",
-        "Casual"
-      ],
+      "platforms": {
+        "en": [
+          "Android"
+        ],
+        "fa": [
+          "اندروید"
+        ]
+      },
+      "genres": {
+        "en": [
+          "Puzzle",
+          "Match-3",
+          "Casual"
+        ],
+        "fa": [
+          "پازل",
+          "سه‌تایی",
+          "کژوال"
+        ]
+      },
       "tech": [
         "Kotlin",
         "Jetpack Compose",
         "OpenGL ES"
       ],
-      "highlights": [
-        "100 handcrafted puzzle levels",
-        "Room-by-room home renovation",
-        "Story chapters between areas",
-        "Boosters: hammer, rocket and shuffle"
-      ],
+      "highlights": {
+        "en": [
+          "100 handcrafted puzzle levels",
+          "Room-by-room home renovation",
+          "Story chapters between areas",
+          "Boosters: hammer, rocket and shuffle"
+        ],
+        "fa": [
+          "۱۰۰ مرحلهٔ پازل دست‌ساز",
+          "بازسازی خانه، اتاق به اتاق",
+          "فصل‌های داستانی بین بخش‌های خانه",
+          "تقویت‌کننده‌ها: چکش، موشک و درهم‌ریزی"
+        ]
+      },
       "accent": "#E0663A",
       "links": {},
       "version": "1.0.0",
       "updated": "2026-10-03",
-      "screenshots": [
-        "assets/games/dream-home/screenshot-home.jpg",
-        "assets/games/dream-home/screenshot-puzzle.jpg",
-        "assets/games/dream-home/screenshot-levels.jpg"
-      ]
+      "screenshots": {
+        "en": [
+          "assets/games/dream-home/screenshot-home.jpg",
+          "assets/games/dream-home/screenshot-puzzle.jpg",
+          "assets/games/dream-home/screenshot-levels.jpg"
+        ],
+        "fa": [
+          "assets/games/dream-home/screenshot-home-fa.jpg",
+          "assets/games/dream-home/screenshot-puzzle-fa.jpg",
+          "assets/games/dream-home/screenshot-levels-fa.jpg"
+        ]
+      }
     }
   ]
 }

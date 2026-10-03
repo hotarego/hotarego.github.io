@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("assets/fonts/Vazirmatn-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root {
   --night: #1b262c;
   --indigo: #1f3d44;
@@ -38,6 +45,52 @@ body {
 :lang(fa) {
   font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
 }
+
+html:lang(fa) body { line-height: 1.8; }
+
+/* Letter-spacing breaks the joins between Persian letters. */
+.hero__title:lang(fa),
+.status:lang(fa) { letter-spacing: normal; }
+
+.i18n-pending body { visibility: hidden; }
+
+.topbar {
+  position: absolute;
+  top: 16px;
+  inset-inline-end: 16px;
+  z-index: 2;
+}
+
+.lang-switch {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: rgba(27, 38, 44, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.lang-switch button {
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lang-switch button:hover { color: var(--cream); }
+
+.lang-switch button[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--amber), var(--peach));
+  color: var(--night);
+}
+
+.lang-switch button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 
 .ridge {
   display: block;
@@ -182,7 +235,7 @@ h2 { font-size: 1.8rem; margin: 0; }
 
 .game__highlights {
   margin: 0 0 16px;
-  padding-left: 20px;
+  padding-inline-start: 20px;
 }
 
 .game__highlights li::marker { color: var(--amber); }
@@ -261,7 +314,7 @@ h2 { font-size: 1.8rem; margin: 0; }
 .lightbox__close {
   position: absolute;
   top: 8px;
-  right: 8px;
+  inset-inline-end: 8px;
   width: 40px;
   height: 40px;
   border: 0;
@@ -276,6 +329,11 @@ h2 { font-size: 1.8rem; margin: 0; }
 @media (max-width: 820px) {
   .game { grid-template-columns: 1fr; padding: 20px; }
   .shot img { height: 320px; }
+}
+
+@media (max-width: 480px) {
+  .topbar { inset-inline: 12px; top: 12px; display: flex; justify-content: center; }
+  .hero { padding-top: 84px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -63,8 +63,36 @@ class SyncGamesTest(unittest.TestCase):
         self.assertNotIn("versionSource", entry)
         self.assertNotIn("secretNote", entry)
 
+    def test_plain_fields_are_published_as_english(self):
+        write_game(self.workspace, "Alpha", highlights=["Fun"])
+        entry = self.catalog()[0]
+        self.assertEqual(entry["title"], {"en": "Alpha"})
+        self.assertEqual(entry["platforms"], {"en": ["Android"]})
+        self.assertEqual(entry["highlights"], {"en": ["Fun"]})
+
+    def test_translations_are_published_in_language_order(self):
+        write_game(
+            self.workspace, "Alpha",
+            title={"fa": "آلفا", "en": "Alpha"},
+            platforms={"en": ["Android"], "fa": ["اندروید"]},
+            tech=["Kotlin"],
+        )
+        entry = self.catalog()[0]
+        self.assertEqual(list(entry["title"].items()), [("en", "Alpha"), ("fa", "آلفا")])
+        self.assertEqual(entry["platforms"]["fa"], ["اندروید"])
+        self.assertEqual(entry["tech"], ["Kotlin"])
+
+    def test_sorts_by_english_title(self):
+        write_game(self.workspace, "Beta", title={"en": "Beta", "fa": "الف"})
+        write_game(self.workspace, "Alpha", title={"en": "Alpha", "fa": "ی"})
+        self.assertEqual([g["id"] for g in self.catalog()], ["alpha", "beta"])
+
     def test_rejects_invalid_manifests(self):
-        cases = [{"status": "shipped"}, {"id": "Bad Id"}, {"title": ""}, {"platforms": "Android"}]
+        cases = [
+            {"status": "shipped"}, {"id": "Bad Id"}, {"title": ""}, {"platforms": "Android"},
+            {"title": {"fa": "فقط فارسی"}}, {"title": {"en": "A", "de": "B"}}, {"tagline": {"en": "A", "fa": " "}},
+            {"highlights": {"en": ["ok"], "fa": "not a list"}}, {"genres": ["ok", ""]},
+        ]
         for overrides in cases:
             with self.subTest(overrides=overrides):
                 with tempfile.TemporaryDirectory() as tmp:
@@ -98,7 +126,25 @@ class SyncGamesTest(unittest.TestCase):
         self.assertFalse(stale.exists())
         self.assertFalse(stale.parent.exists())
         games = json.loads((self.site / "games.json").read_text(encoding="utf-8"))["games"]
-        self.assertEqual(games[0]["screenshots"], ["assets/games/alpha/one.jpg"])
+        self.assertEqual(games[0]["screenshots"], {"en": ["assets/games/alpha/one.jpg"]})
+
+    def test_screenshots_can_differ_per_language(self):
+        game = write_game(self.workspace, "Alpha", screenshots={"en": ["media/en.jpg"], "fa": ["media/fa.jpg"]})
+        (game / "media").mkdir()
+        (game / "media" / "en.jpg").write_bytes(b"en")
+        (game / "media" / "fa.jpg").write_bytes(b"fa")
+        self.assertEqual(self.catalog()[0]["screenshots"], {
+            "en": ["assets/games/alpha/en.jpg"],
+            "fa": ["assets/games/alpha/fa.jpg"],
+        })
+
+    def test_rejects_screenshots_with_clashing_names(self):
+        game = write_game(self.workspace, "Alpha", screenshots={"en": ["en/shot.jpg"], "fa": ["fa/shot.jpg"]})
+        for lang in ("en", "fa"):
+            (game / lang).mkdir()
+            (game / lang / "shot.jpg").write_bytes(lang.encode())
+        with self.assertRaises(sync_games.CatalogError):
+            self.catalog()
 
     def test_sync_is_idempotent_and_check_detects_drift(self):
         write_game(self.workspace, "Alpha")

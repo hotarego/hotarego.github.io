@@ -24,5 +24,17 @@ Whenever a game's `game.json`, screenshots or version changes, or a game is adde
   `version` or `versionSource` (file containing `versionName = "x.y.z"`).
 - `updated` is taken from the game repo's latest commit date.
 
+## Languages
+The site is in English (`en`) and Persian (`fa`). It follows the visitor's browser languages by
+default, and the switcher can pin either language or go back to the system default.
+
+- `title`, `tagline`, `description`, `platforms`, `genres`, `highlights` and `screenshots` are either
+  a plain English value or `{"en": ..., "fa": ...}`. English is required; a missing `fa` falls back
+  to English. `games.json` always publishes the `{"en": ..., "fa": ...}` form.
+- Every page string lives in `STRINGS` in `app.js` with both languages. Keep `index.html`'s English
+  text as the no-JavaScript fallback.
+- Use logical CSS properties (`padding-inline-start`, `inset-inline-end`, ...) so RTL works, and
+  never set `letter-spacing` on Persian text.
+
 Only the fields above are published. Game repos may be private, so never link to them unless they
 are public.

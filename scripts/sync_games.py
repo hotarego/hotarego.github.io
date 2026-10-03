@@ -26,6 +26,9 @@ PUBLIC_FIELDS = (
     "id", "title", "tagline", "description", "status", "platforms", "genres",
     "tech", "highlights", "accent", "links",
 )
+LANGUAGES = ("en", "fa")
+LOCALIZED_TEXT = ("title", "tagline", "description")
+LOCALIZED_LISTS = ("platforms", "genres", "highlights", "screenshots")
 
 
 class CatalogError(Exception):
@@ -55,7 +58,28 @@ def read_updated(game_dir: Path) -> str | None:
     return result.stdout.strip() or None
 
 
-def validate(meta: dict, source: Path) -> None:
+def _is_text(value) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def localize(value, key: str, source: Path, is_list: bool) -> dict:
+    """Normalize a plain English value or a {language: value} map to {language: value}."""
+    translations = value if isinstance(value, dict) else {"en": value}
+    unknown = sorted(set(translations) - set(LANGUAGES))
+    if unknown:
+        raise CatalogError(f"{source}: {key} has unsupported languages: {', '.join(unknown)}")
+    if "en" not in translations:
+        raise CatalogError(f"{source}: {key} needs an English (en) value")
+    for lang, text in translations.items():
+        ok = (isinstance(text, list) and all(_is_text(t) for t in text)) if is_list else _is_text(text)
+        if not ok:
+            kind = "a list of non-empty strings" if is_list else "a non-empty string"
+            raise CatalogError(f"{source}: {key}.{lang} must be {kind}")
+    return {lang: translations[lang] for lang in LANGUAGES if lang in translations}
+
+
+def validate(meta: dict, source: Path) -> dict:
+    """Check a manifest and return it with every localized field as a {language: value} map."""
     missing = [key for key in REQUIRED if not meta.get(key)]
     if missing:
         raise CatalogError(f"{source}: missing {', '.join(missing)}")
@@ -63,8 +87,11 @@ def validate(meta: dict, source: Path) -> None:
         raise CatalogError(f"{source}: id must be lowercase-kebab-case, got {meta['id']!r}")
     if meta["status"] not in STATUSES:
         raise CatalogError(f"{source}: status must be one of {', '.join(STATUSES)}")
-    if not isinstance(meta["platforms"], list):
-        raise CatalogError(f"{source}: platforms must be a list")
+    normalized = dict(meta)
+    for key in LOCALIZED_TEXT + LOCALIZED_LISTS:
+        if key in meta:
+            normalized[key] = localize(meta[key], key, source, is_list=key in LOCALIZED_LISTS)
+    return normalized
 
 
 def find_games(workspace: Path, site_dir: Path) -> list[tuple[Path, dict]]:
@@ -73,8 +100,7 @@ def find_games(workspace: Path, site_dir: Path) -> list[tuple[Path, dict]]:
         manifest = folder / "game.json"
         if folder.resolve() == site_dir.resolve() or not manifest.is_file():
             continue
-        meta = json.loads(manifest.read_text(encoding="utf-8"))
-        validate(meta, manifest)
+        meta = validate(json.loads(manifest.read_text(encoding="utf-8")), manifest)
         games.append((folder, meta))
     ids = [meta["id"] for _, meta in games]
     duplicates = sorted({i for i in ids if ids.count(i) > 1})
@@ -90,17 +116,21 @@ def build_catalog(workspace: Path, site_dir: Path) -> tuple[dict, dict[Path, Pat
         entry = {key: meta[key] for key in PUBLIC_FIELDS if key in meta}
         entry["version"] = read_version(game_dir, meta)
         entry["updated"] = read_updated(game_dir)
-        shots = []
-        for rel in meta.get("screenshots", []):
-            src = game_dir / rel
-            if not src.is_file():
-                raise CatalogError(f"{meta['id']}: screenshot not found: {rel}")
-            dest_rel = f"assets/games/{meta['id']}/{src.name}"
-            copies[src] = site_dir / dest_rel
-            shots.append(dest_rel)
+        shots, sources = {}, {}
+        for lang, rels in meta.get("screenshots", {"en": []}).items():
+            shots[lang] = []
+            for rel in rels:
+                src = game_dir / rel
+                if not src.is_file():
+                    raise CatalogError(f"{meta['id']}: screenshot not found: {rel}")
+                dest_rel = f"assets/games/{meta['id']}/{src.name}"
+                if sources.setdefault(dest_rel, src) != src:
+                    raise CatalogError(f"{meta['id']}: two screenshots are named {src.name}")
+                copies[src] = site_dir / dest_rel
+                shots[lang].append(dest_rel)
         entry["screenshots"] = shots
         entries.append(entry)
-    entries.sort(key=lambda g: (STATUSES.index(g["status"]), g["title"].lower()))
+    entries.sort(key=lambda g: (STATUSES.index(g["status"]), g["title"]["en"].lower()))
     return {"games": entries}, copies
 
 

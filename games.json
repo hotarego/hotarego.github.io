@@ -11,8 +11,8 @@
         "fa": "پازل حل کن، خونه‌ی قدیمی مادربزرگ رو سر و سامون بده."
       },
       "description": {
-        "en": "Mehr just inherited Grandma Shirin's house in Hotarego, and the place is a mess. Beat match-3 levels to earn stars, then spend them on the house: fix the door, paint the walls, pick a rug. Every job you finish moves the story along. Meanwhile a developer named Mr. Farhad would really like you to sell.",
-        "fa": "مهر خونه‌ی مادربزرگ شیرین رو توی هوتارگو به ارث برده و خونه حسابی به هم ریخته‌ست. مرحله‌ها رو ببر، ستاره جمع کن و باهاشون به خونه برس: در رو تعمیر کن، دیوارها رو رنگ بزن، یه فرش انتخاب کن. هر کاری که تموم بشه، داستان یه قدم جلو می‌ره. این وسط یه بساز‌وبفروش به اسم آقای فرهاد هم خیلی دلش می‌خواد خونه رو بفروشی."
+        "en": "Nahid just inherited Grandma Shirin's house in Hotarego, and the place is a mess. Beat match-3 levels to earn stars, then spend them on the house: fix the door, paint the walls, pick a rug. Every job you finish moves the story along. Meanwhile a developer named Mr. Farhad would really like you to sell.",
+        "fa": "ناهید خونه‌ی مادربزرگ شیرین رو توی هوتارگو به ارث برده و خونه حسابی به هم ریخته‌ست. مرحله‌ها رو ببر، ستاره جمع کن و باهاشون به خونه برس: در رو تعمیر کن، دیوارها رو رنگ بزن، یه فرش انتخاب کن. هر کاری که تموم بشه، داستان یه قدم جلو می‌ره. این وسط یه بساز‌وبفروش به اسم آقای فرهاد هم خیلی دلش می‌خواد خونه رو بفروشی."
       },
       "status": "in-development",
       "platforms": {
@@ -57,7 +57,7 @@
       "accent": "#E0663A",
       "links": {},
       "version": "1.0.0",
-      "updated": "2026-10-04",
+      "updated": "2026-10-05",
       "screenshots": {
         "en": [
           "assets/games/dream-home/en/01-room.jpg",

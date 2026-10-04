@@ -25,6 +25,14 @@ const STRINGS = {
     "about.craft": "We like puzzle games you can play on a short break, so that's the kind we make.",
     "lightbox.label": "Screenshot",
     "lightbox.close": "Close",
+    "player.label": (title) => `${title} clip`,
+    "player.play": "Play",
+    "player.pause": "Pause",
+    "player.mute": "Mute",
+    "player.unmute": "Sound on",
+    "player.seek": "Position in the clip",
+    "player.fullscreen": "Full screen",
+    "player.exit": "Exit full screen",
     "status.released": "Released",
     "status.beta": "Beta",
     "status.in-development": "In development",
@@ -60,6 +68,14 @@ const STRINGS = {
     "about.craft": "خودمان بازی‌های پازلی را دوست داریم که بشود توی یک استراحت کوتاه بازی‌شان کرد؛ بازی‌های خودمان را هم همین‌طوری می‌سازیم.",
     "lightbox.label": "تصویر بازی",
     "lightbox.close": "بستن",
+    "player.label": (title) => `کلیپ ${title}`,
+    "player.play": "پخش",
+    "player.pause": "توقف",
+    "player.mute": "بی‌صدا",
+    "player.unmute": "با صدا",
+    "player.seek": "جای کلیپ",
+    "player.fullscreen": "تمام‌صفحه",
+    "player.exit": "خروج از تمام‌صفحه",
     "status.released": "منتشر شده",
     "status.beta": "بتا",
     "status.in-development": "در دست ساخت",
@@ -146,6 +162,175 @@ function formatDate(iso) {
   return date.toLocaleDateString(INTL_LOCALE[lang], { year: "numeric", month: "short", day: "numeric" });
 }
 
+const PLAYER_ICONS = {
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6l11.2-6.8z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4.2v14H6zm7.8 0H18v14h-4.2z"/></svg>',
+  sound: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3.2L12 5.2v13.6L7.2 15H4zm10.2-2.2 1.4 1.4a3.2 3.2 0 0 1 0 4.6l-1.4 1.4a5.2 5.2 0 0 0 0-7.4zm2.6-2.6 1.4 1.4a7 7 0 0 1 0 9.8l-1.4 1.4a9 9 0 0 0 0-12.6z"/></svg>',
+  muted: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3.2L12 5.2v13.6L7.2 15H4zm11.2.8 4.4 4.4-1.4 1.4-4.4-4.4-1.4 1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4 1.4 1.4 1.4-1.4z"/></svg>',
+  full: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5v2H6v3zm10-5h5v5h-2V6h-3zM6 15H4v5h5v-2H6zm12 0h2v5h-5v-2h3z"/></svg>',
+  exit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H4v5h2V6h3zm6 0h5v5h-2V6h-3zM6 15H4v5h5v-2H6zm12 3v-3h2v5h-5v-2z"/></svg>',
+};
+
+function playerIcon(name) {
+  const node = el("span", { class: "player__icon" });
+  node.innerHTML = PLAYER_ICONS[name];
+  return node;
+}
+
+function clock(seconds) {
+  const total = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
+  const minutes = Math.floor(total / 60);
+  const remain = String(total % 60).padStart(2, "0");
+  return digits(`${minutes}:${remain}`);
+}
+
+function renderPlayer(src, poster, title) {
+  const video = el("video", { class: "player__video", playsinline: "", preload: "metadata" });
+  if (poster) video.poster = poster;
+  video.src = src;
+
+  const toggle = el("button", { class: "player__toggle", type: "button", "aria-label": t("player.play") }, [
+    playerIcon("play"),
+  ]);
+  const barPlay = el("button", { class: "player__btn", type: "button", "aria-label": t("player.play") }, [
+    playerIcon("play"),
+  ]);
+  const time = el("span", { class: "player__time", dir: "ltr", text: `${clock(0)} / ${clock(0)}` });
+  const seek = el("input", {
+    class: "player__seek",
+    type: "range",
+    min: "0",
+    max: "1000",
+    value: "0",
+    step: "1",
+    dir: "ltr",
+    "aria-label": t("player.seek"),
+    "aria-valuemin": "0",
+    "aria-valuemax": "1000",
+    "aria-valuenow": "0",
+  });
+  const mute = el("button", { class: "player__btn", type: "button", "aria-label": t("player.mute") }, [
+    playerIcon("sound"),
+  ]);
+  const full = el("button", { class: "player__btn", type: "button", "aria-label": t("player.fullscreen") }, [
+    playerIcon("full"),
+  ]);
+  const mark = el("span", { class: "player__mark", text: lang === "fa" ? "هوتارگو" : "Hotarego" });
+  const controls = el("div", { class: "player__controls" }, [barPlay, time, mute, full]);
+  const bar = el("div", { class: "player__bar" }, [seek, controls]);
+  const player = el("div", { class: "player", role: "region", "aria-label": t("player.label", title) }, [
+    video, mark, toggle, bar,
+  ]);
+
+  let scrubbing = false;
+  let suppressSeek = false;
+
+  function paintSeek() {
+    const shown = scrubbing ? (Number(seek.value) / 1000) * video.duration : video.currentTime;
+    seek.style.setProperty("--pct", `${Number(seek.value) / 10}%`);
+    seek.setAttribute("aria-valuenow", seek.value);
+    seek.setAttribute("aria-valuetext", clock(shown));
+  }
+
+  function writeSeek(next) {
+    suppressSeek = true;
+    seek.value = String(next);
+    setTimeout(() => {
+      suppressSeek = false;
+    }, 0);
+  }
+
+  function showTime() {
+    if (scrubbing) return;
+    time.textContent = `${clock(video.currentTime)} / ${clock(video.duration)}`;
+    if (Number.isFinite(video.duration) && video.duration > 0) {
+      writeSeek(Math.round((video.currentTime / video.duration) * 1000));
+    }
+    paintSeek();
+  }
+
+  function setPlaying(playing) {
+    player.classList.toggle("is-playing", playing);
+    const label = t(playing ? "player.pause" : "player.play");
+    const glyph = playing ? "pause" : "play";
+    toggle.setAttribute("aria-label", label);
+    barPlay.setAttribute("aria-label", label);
+    toggle.replaceChildren(playerIcon(glyph));
+    barPlay.replaceChildren(playerIcon(glyph));
+  }
+
+  function playPause() {
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
+  }
+
+  function toggleMute() {
+    video.muted = !video.muted;
+    mute.setAttribute("aria-label", t(video.muted ? "player.unmute" : "player.mute"));
+    mute.replaceChildren(playerIcon(video.muted ? "muted" : "sound"));
+  }
+
+  function toggleFull() {
+    if (document.fullscreenElement === player) document.exitFullscreen();
+    else player.requestFullscreen();
+  }
+
+  function nudge(delta) {
+    if (!Number.isFinite(video.duration)) return;
+    video.currentTime = Math.min(video.duration, Math.max(0, video.currentTime + delta));
+  }
+
+  toggle.addEventListener("click", playPause);
+  barPlay.addEventListener("click", playPause);
+  video.addEventListener("click", playPause);
+  mute.addEventListener("click", toggleMute);
+  full.addEventListener("click", toggleFull);
+  video.addEventListener("play", () => setPlaying(true));
+  video.addEventListener("pause", () => setPlaying(false));
+  video.addEventListener("ended", () => setPlaying(false));
+  video.addEventListener("loadedmetadata", showTime);
+  video.addEventListener("timeupdate", showTime);
+  video.addEventListener("durationchange", showTime);
+  seek.addEventListener("input", () => {
+    if (suppressSeek || !Number.isFinite(video.duration) || video.duration <= 0) return;
+    const target = (Number(seek.value) / 1000) * video.duration;
+    scrubbing = true;
+    if (Math.abs(video.currentTime - target) > 0.05) video.currentTime = target;
+    else scrubbing = false;
+    time.textContent = `${clock(target)} / ${clock(video.duration)}`;
+    paintSeek();
+  });
+  video.addEventListener("seeked", () => {
+    scrubbing = false;
+    showTime();
+  });
+  player.addEventListener("fullscreenchange", () => {
+    const open = document.fullscreenElement === player;
+    full.setAttribute("aria-label", t(open ? "player.exit" : "player.fullscreen"));
+    full.replaceChildren(playerIcon(open ? "exit" : "full"));
+    player.classList.toggle("is-fullscreen", open);
+  });
+  player.addEventListener("keydown", (event) => {
+    if (event.target === seek) return;
+    if ((event.code === "Space" || event.key === "k" || event.key === "K") && event.target.tagName !== "BUTTON") {
+      event.preventDefault();
+      playPause();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      nudge(5);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      nudge(-5);
+    } else if (event.key === "m" || event.key === "M") {
+      toggleMute();
+    } else if (event.key === "f" || event.key === "F") {
+      toggleFull();
+    }
+  });
+  paintSeek();
+  return player;
+}
+
 function renderGame(game) {
   const title = localized(game.title);
   const tagline = localized(game.tagline);
@@ -178,18 +363,23 @@ function renderGame(game) {
     links.length ? el("div", { class: "game__links" }, links) : null,
   ]);
 
-  const shots = (localized(game.screenshots).value ?? []).map((src, i) => {
+  const shots = localized(game.screenshots).value ?? [];
+  const shotButtons = shots.map((src, i) => {
     const n = digits(i + 1);
     const button = el("button", { class: "shot", type: "button", "aria-label": t("shotOpen", title.value, n) }, [
-      el("img", { src, alt: t("shotAlt", title.value, n), loading: "lazy", width: "540", height: "1152" }),
+      el("img", { src, alt: t("shotAlt", title.value, n), loading: "lazy", width: "540", height: "960" }),
     ]);
     button.addEventListener("click", () => openLightbox(src, t("shotAlt", title.value, n)));
     return button;
   });
+  const clip = (localized(game.clips).value ?? [])[0];
+  const media = [];
+  if (clip) media.push(renderPlayer(clip, shots[0], title.value));
+  if (shotButtons.length) media.push(el("div", { class: "shots" }, shotButtons));
 
   return el("article", { class: "game", id: game.id, style: { "--accent": game.accent ?? "" } }, [
     info,
-    shots.length ? el("div", { class: "shots" }, shots) : null,
+    media.length ? el("div", { class: "game__media" }, media) : null,
   ]);
 }
 

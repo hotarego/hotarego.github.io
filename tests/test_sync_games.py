@@ -122,11 +122,12 @@ class SyncGamesTest(unittest.TestCase):
 
         self.assertTrue(sync_games.sync(self.workspace, self.site))
 
-        self.assertEqual((self.site / "assets/games/alpha/one.jpg").read_bytes(), b"img")
+        self.assertEqual((self.site / "assets/games/alpha/en/one.jpg").read_bytes(), b"img")
         self.assertFalse(stale.exists())
         self.assertFalse(stale.parent.exists())
         games = json.loads((self.site / "games.json").read_text(encoding="utf-8"))["games"]
-        self.assertEqual(games[0]["screenshots"], {"en": ["assets/games/alpha/one.jpg"]})
+        self.assertEqual(games[0]["screenshots"], {"en": ["assets/games/alpha/en/one.jpg"]})
+        self.assertNotIn("clips", games[0])
 
     def test_screenshots_can_differ_per_language(self):
         game = write_game(self.workspace, "Alpha", screenshots={"en": ["media/en.jpg"], "fa": ["media/fa.jpg"]})
@@ -134,15 +135,38 @@ class SyncGamesTest(unittest.TestCase):
         (game / "media" / "en.jpg").write_bytes(b"en")
         (game / "media" / "fa.jpg").write_bytes(b"fa")
         self.assertEqual(self.catalog()[0]["screenshots"], {
-            "en": ["assets/games/alpha/en.jpg"],
-            "fa": ["assets/games/alpha/fa.jpg"],
+            "en": ["assets/games/alpha/en/en.jpg"],
+            "fa": ["assets/games/alpha/fa/fa.jpg"],
         })
 
-    def test_rejects_screenshots_with_clashing_names(self):
+    def test_keeps_screenshots_that_share_a_filename(self):
         game = write_game(self.workspace, "Alpha", screenshots={"en": ["en/shot.jpg"], "fa": ["fa/shot.jpg"]})
         for lang in ("en", "fa"):
             (game / lang).mkdir()
             (game / lang / "shot.jpg").write_bytes(lang.encode())
+        sync_games.sync(self.workspace, self.site)
+        self.assertEqual((self.site / "assets/games/alpha/en/shot.jpg").read_bytes(), b"en")
+        self.assertEqual((self.site / "assets/games/alpha/fa/shot.jpg").read_bytes(), b"fa")
+        self.assertEqual(self.catalog()[0]["screenshots"], {
+            "en": ["assets/games/alpha/en/shot.jpg"],
+            "fa": ["assets/games/alpha/fa/shot.jpg"],
+        })
+
+    def test_sync_copies_clips(self):
+        game = write_game(self.workspace, "Alpha", clips={"en": ["en.mp4"], "fa": ["fa.mp4"]})
+        (game / "en.mp4").write_bytes(b"en-clip")
+        (game / "fa.mp4").write_bytes(b"fa-clip")
+        sync_games.sync(self.workspace, self.site)
+        self.assertEqual((self.site / "assets/games/alpha/en/en.mp4").read_bytes(), b"en-clip")
+        self.assertEqual((self.site / "assets/games/alpha/fa/fa.mp4").read_bytes(), b"fa-clip")
+        games = json.loads((self.site / "games.json").read_text(encoding="utf-8"))["games"]
+        self.assertEqual(games[0]["clips"], {
+            "en": ["assets/games/alpha/en/en.mp4"],
+            "fa": ["assets/games/alpha/fa/fa.mp4"],
+        })
+
+    def test_rejects_missing_clip(self):
+        write_game(self.workspace, "Alpha", clips=["media/missing.mp4"])
         with self.assertRaises(sync_games.CatalogError):
             self.catalog()
 

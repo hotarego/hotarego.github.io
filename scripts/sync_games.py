@@ -1,9 +1,9 @@
-"""Build games.json and screenshot assets from the game folders in the workspace.
+"""Build games.json and media assets from the game folders in the workspace.
 
 Every sibling folder of this site that contains a game.json is treated as a game.
 Run from anywhere:
 
-    python scripts/sync_games.py          # write games.json and copy screenshots
+    python scripts/sync_games.py          # write games.json and copy screenshots and clips
     python scripts/sync_games.py --check  # exit 1 if games.json is out of date
 """
 
@@ -28,7 +28,7 @@ PUBLIC_FIELDS = (
 )
 LANGUAGES = ("en", "fa")
 LOCALIZED_TEXT = ("title", "tagline", "description")
-LOCALIZED_LISTS = ("platforms", "genres", "highlights", "screenshots")
+LOCALIZED_LISTS = ("platforms", "genres", "highlights", "screenshots", "clips")
 
 
 class CatalogError(Exception):
@@ -109,26 +109,41 @@ def find_games(workspace: Path, site_dir: Path) -> list[tuple[Path, dict]]:
     return games
 
 
-def build_catalog(workspace: Path, site_dir: Path) -> tuple[dict, dict[Path, Path]]:
-    """Return the catalog and a {source: destination} map of screenshots to copy."""
+def publish_media(meta: dict, game_dir: Path, key: str) -> tuple[dict, dict[str, Path]]:
+    """Return published paths and a {site-relative dest: source} map for one media field.
+
+    Files land in assets/games/<id>/<language>/ so English and Persian can share a filename.
+    """
+    kind = "clip" if key == "clips" else "screenshot"
+    published, copies = {}, {}
+    for lang, rels in meta.get(key, {"en": []}).items():
+        published[lang] = []
+        for rel in rels:
+            src = game_dir / rel
+            if not src.is_file():
+                raise CatalogError(f"{meta['id']}: {kind} not found: {rel}")
+            dest_rel = f"assets/games/{meta['id']}/{lang}/{src.name}"
+            if dest_rel in copies and copies[dest_rel] != src:
+                raise CatalogError(f"{meta['id']}: two {key} files share {dest_rel}")
+            copies[dest_rel] = src
+            published[lang].append(dest_rel)
+    return published, copies
+
+
+def build_catalog(workspace: Path, site_dir: Path) -> tuple[dict, dict[str, Path]]:
+    """Return the catalog and a {site-relative dest: source} map of media to copy."""
     entries, copies = [], {}
     for game_dir, meta in find_games(workspace, site_dir):
         entry = {key: meta[key] for key in PUBLIC_FIELDS if key in meta}
         entry["version"] = read_version(game_dir, meta)
         entry["updated"] = read_updated(game_dir)
-        shots, sources = {}, {}
-        for lang, rels in meta.get("screenshots", {"en": []}).items():
-            shots[lang] = []
-            for rel in rels:
-                src = game_dir / rel
-                if not src.is_file():
-                    raise CatalogError(f"{meta['id']}: screenshot not found: {rel}")
-                dest_rel = f"assets/games/{meta['id']}/{src.name}"
-                if sources.setdefault(dest_rel, src) != src:
-                    raise CatalogError(f"{meta['id']}: two screenshots are named {src.name}")
-                copies[src] = site_dir / dest_rel
-                shots[lang].append(dest_rel)
+        shots, shot_copies = publish_media(meta, game_dir, "screenshots")
         entry["screenshots"] = shots
+        copies.update(shot_copies)
+        if "clips" in meta:
+            clips, clip_copies = publish_media(meta, game_dir, "clips")
+            entry["clips"] = clips
+            copies.update(clip_copies)
         entries.append(entry)
     entries.sort(key=lambda g: (STATUSES.index(g["status"]), g["title"]["en"].lower()))
     return {"games": entries}, copies
@@ -144,7 +159,8 @@ def sync(workspace: Path, site_dir: Path, check: bool = False) -> bool:
     output = site_dir / "games.json"
     text = render(catalog)
     changed = not output.is_file() or output.read_text(encoding="utf-8") != text
-    for src, dest in copies.items():
+    for dest_rel, src in copies.items():
+        dest = site_dir / dest_rel
         if not dest.is_file() or dest.read_bytes() != src.read_bytes():
             changed = True
             if not check:
@@ -152,7 +168,7 @@ def sync(workspace: Path, site_dir: Path, check: bool = False) -> bool:
                 shutil.copyfile(src, dest)
     games_assets = site_dir / "assets" / "games"
     if games_assets.is_dir():
-        keep = {dest.resolve() for dest in copies.values()}
+        keep = {(site_dir / dest_rel).resolve() for dest_rel in copies}
         for path in sorted(games_assets.rglob("*"), reverse=True):
             if path.is_file() and path.resolve() not in keep:
                 changed = True

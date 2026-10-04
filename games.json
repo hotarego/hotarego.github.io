@@ -60,14 +60,28 @@
       "updated": "2026-10-04",
       "screenshots": {
         "en": [
-          "assets/games/dream-home/screenshot-home.jpg",
-          "assets/games/dream-home/screenshot-puzzle.jpg",
-          "assets/games/dream-home/screenshot-levels.jpg"
+          "assets/games/dream-home/en/01-room.jpg",
+          "assets/games/dream-home/en/02-puzzle.jpg",
+          "assets/games/dream-home/en/03-picker.jpg",
+          "assets/games/dream-home/en/04-boosters.jpg",
+          "assets/games/dream-home/en/05-win.jpg",
+          "assets/games/dream-home/en/06-story.jpg"
         ],
         "fa": [
-          "assets/games/dream-home/screenshot-home-fa.jpg",
-          "assets/games/dream-home/screenshot-puzzle-fa.jpg",
-          "assets/games/dream-home/screenshot-levels-fa.jpg"
+          "assets/games/dream-home/fa/01-room.jpg",
+          "assets/games/dream-home/fa/02-puzzle.jpg",
+          "assets/games/dream-home/fa/03-picker.jpg",
+          "assets/games/dream-home/fa/04-boosters.jpg",
+          "assets/games/dream-home/fa/05-win.jpg",
+          "assets/games/dream-home/fa/06-story.jpg"
+        ]
+      },
+      "clips": {
+        "en": [
+          "assets/games/dream-home/en/dreamhome-clip-en.mp4"
+        ],
+        "fa": [
+          "assets/games/dream-home/fa/dreamhome-clip-fa.mp4"
         ]
       }
     }

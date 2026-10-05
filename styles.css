@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Vazirmatn";
-  src: url("assets/fonts/Vazirmatn-Variable.woff2") format("woff2");
+  font-family: "Estedad";
+  src: url("assets/fonts/Estedad-Variable.woff2") format("woff2");
   font-weight: 100 900;
   font-display: swap;
 }
@@ -43,10 +43,10 @@ body {
 }
 
 :lang(fa) {
-  font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+  font-family: "Estedad", "Segoe UI", Tahoma, sans-serif;
 }
 
-/* Vazirmatn draws smaller than the Latin face at the same size. */
+/* Estedad draws smaller than the Latin face at the same size. */
 html:lang(fa) { font-size: 112.5%; }
 
 html:lang(fa) body { line-height: 1.8; }

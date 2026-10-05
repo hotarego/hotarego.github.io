@@ -46,6 +46,9 @@ body {
   font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
 }
 
+/* Vazirmatn draws smaller than the Latin face at the same size. */
+html:lang(fa) { font-size: 112.5%; }
+
 html:lang(fa) body { line-height: 1.8; }
 
 /* Letter-spacing breaks the joins between Persian letters. */

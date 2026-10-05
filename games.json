@@ -45,12 +45,14 @@
           "100 levels in the first area",
           "You choose the style of the door, walls, floor and more",
           "A short story told between levels",
+          "A house rank, with a title on the room and a gift every five levels",
           "Hammer, rocket and shuffle for when you're stuck"
         ],
         "fa": [
           "۱۰۰ تا مرحله فقط توی بخش اول",
           "شکل در، دیوارها، کف و بقیه‌ی اتاق رو خودت انتخاب می‌کنی",
           "یه داستان کوتاه که بین مرحله‌ها جلو می‌ره",
+          "رتبه‌ی خونه، با یک عنوان روی اتاق و هدیه‌ای هر پنج سطح",
           "چکش، موشک و به‌هم‌ریختن برای وقتی که گیر کردی"
         ]
       },
@@ -78,12 +80,19 @@
       },
       "clips": {
         "en": [
-          "assets/games/dream-home/en/dreamhome-clip-en.mp4"
+          "assets/games/dream-home/en/dreamhome-clip-en.mp4",
+          "assets/games/dream-home/en/dreamhome-ad-45-en.mp4",
+          "assets/games/dream-home/en/dreamhome-ad-30-en.mp4",
+          "assets/games/dream-home/en/dreamhome-ad-15-en.mp4"
         ],
         "fa": [
-          "assets/games/dream-home/fa/dreamhome-clip-fa.mp4"
+          "assets/games/dream-home/fa/dreamhome-clip-fa.mp4",
+          "assets/games/dream-home/fa/dreamhome-ad-45-fa.mp4",
+          "assets/games/dream-home/fa/dreamhome-ad-30-fa.mp4",
+          "assets/games/dream-home/fa/dreamhome-ad-15-fa.mp4"
         ]
-      }
+      },
+      "guide": "dream-home/"
     }
   ]
 }

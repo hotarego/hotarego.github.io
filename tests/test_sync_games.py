@@ -180,6 +180,21 @@ class SyncGamesTest(unittest.TestCase):
         self.assertTrue(sync_games.sync(self.workspace, self.site, check=True))
         self.assertEqual(len(json.loads((self.site / "games.json").read_text())["games"]), 1)
 
+    def test_guide_link_is_published_and_stills_are_copied_beside_the_handbook(self):
+        game = write_game(
+            self.workspace, "Alpha", guide="dream-home/",
+            guideMedia={"en": ["media/screenshot-home.jpg"], "fa": ["media/screenshot-home-fa.jpg"]},
+        )
+        (game / "media").mkdir()
+        (game / "media" / "screenshot-home.jpg").write_bytes(b"home")
+        (game / "media" / "screenshot-home-fa.jpg").write_bytes(b"home-fa")
+        sync_games.sync(self.workspace, self.site)
+        games = json.loads((self.site / "games.json").read_text(encoding="utf-8"))["games"]
+        self.assertEqual(games[0]["guide"], "dream-home/")
+        self.assertNotIn("guideMedia", games[0])
+        self.assertEqual((self.site / "dream-home/media/en/home.jpg").read_bytes(), b"home")
+        self.assertEqual((self.site / "dream-home/media/fa/home.jpg").read_bytes(), b"home-fa")
+
 
 if __name__ == "__main__":
     unittest.main()

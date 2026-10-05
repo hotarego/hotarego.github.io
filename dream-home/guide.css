@@ -1,0 +1,105 @@
+.guide {
+  width: min(44rem, calc(100% - 2rem));
+  margin: 5.5rem auto 4rem;
+}
+
+.guide__back {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.guide__back:hover { color: var(--cream); }
+
+.guide__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.guide__nav a {
+  color: var(--cream);
+  text-decoration: none;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  background: var(--panel);
+}
+
+.guide__nav a[aria-current="page"] {
+  background: var(--amber);
+  color: var(--night);
+  border-color: transparent;
+}
+
+.guide h1 {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  line-height: 1.15;
+  margin: 0.2rem 0 1rem;
+}
+
+html:lang(fa) .guide h1,
+html:lang(fa) .guide h2 { letter-spacing: 0; }
+
+.guide__kicker {
+  margin: 0;
+  color: var(--amber);
+  font-weight: 700;
+}
+
+.guide h2 {
+  font-size: 1.55rem;
+  margin: 2.2rem 0 0.6rem;
+}
+
+.guide p, .guide li { color: var(--cream); }
+
+.guide .muted { color: var(--muted); }
+
+.guide ul, .guide ol { padding-inline-start: 1.2rem; }
+
+.guide li + li { margin-top: 0.35rem; }
+
+.guide figure {
+  margin: 1.4rem 0;
+}
+
+.guide figure img,
+.guide video {
+  display: block;
+  width: min(100%, 280px);
+  margin-inline: auto;
+  border-radius: 22px;
+  background: #000;
+}
+
+.guide figcaption {
+  margin-top: 0.55rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.guide table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.95rem;
+}
+
+.guide th, .guide td {
+  text-align: start;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--panel-border);
+  vertical-align: top;
+}
+
+.guide th { color: var(--amber); font-weight: 700; }
+
+.guide .note {
+  margin: 1.2rem 0;
+  padding: 0.9rem 1rem;
+  border-inline-start: 4px solid var(--amber);
+  background: var(--panel);
+  border-radius: 12px;
+}

@@ -40,7 +40,7 @@ const STRINGS = {
     "link.playStore": "Google Play",
     "link.download": "Download",
     "link.trailer": "Trailer",
-    "link.repo": "Source",
+    "guide.open": "How to play",
     gameCount: (n) => `${n} ${n === 1 ? "game" : "games"}`,
     version: (v) => `v${v}`,
     updated: (date) => `Updated ${date}`,
@@ -83,7 +83,7 @@ const STRINGS = {
     "link.playStore": "گوگل‌پلی",
     "link.download": "دانلود",
     "link.trailer": "تریلر",
-    "link.repo": "کد منبع",
+    "guide.open": "راهنمای بازی",
     gameCount: (n) => `${n.toLocaleString("fa-IR")} بازی`,
     version: (v) => `نسخهٔ ${v}`,
     updated: (date) => `آخرین تغییر: ${date}`,
@@ -353,6 +353,11 @@ function renderGame(game) {
     .filter(([, url]) => typeof url === "string" && url.startsWith("https://"))
     .map(([kind, url]) => el("a", { class: "button", href: url, text: t(`link.${kind}`) ?? kind }));
 
+  const guideLink = game.guide ? el("a", { class: "button", href: game.guide, text: t("guide.open") }) : null;
+  const linkRow = links.length || guideLink
+    ? el("div", { class: "game__links" }, [...links, guideLink].filter(Boolean))
+    : null;
+
   const info = el("div", { class: "game__info" }, [
     el("h3", { class: "game__title", text: title.value, ...langProps(title.lang) }),
     el("p", { class: "game__tagline", text: tagline.value, ...langProps(tagline.lang) }),
@@ -360,7 +365,7 @@ function renderGame(game) {
     el("p", { class: "game__description", text: description.value, ...langProps(description.lang) }),
     highlightList,
     tagList([localized(game.genres), localized(game.tech)]),
-    links.length ? el("div", { class: "game__links" }, links) : null,
+    linkRow,
   ]);
 
   const shots = localized(game.screenshots).value ?? [];

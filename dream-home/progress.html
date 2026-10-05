@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dream Home</title>
+  <meta name="theme-color" content="#1B262C">
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/Vazirmatn-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="guide.css">
+  <script>
+    (function () {
+      var supported = ["en", "fa"], choice = "system", lang = "en";
+      try { choice = localStorage.getItem("hotarego.lang") || "system"; } catch (e) {}
+      if (supported.indexOf(choice) >= 0) lang = choice;
+      else {
+        var prefs = navigator.languages || [navigator.language || "en"];
+        for (var i = 0; i < prefs.length; i++) {
+          var primary = String(prefs[i]).toLowerCase().split("-")[0];
+          if (supported.indexOf(primary) >= 0) { lang = primary; break; }
+        }
+      }
+      var root = document.documentElement;
+      root.lang = lang;
+      root.dir = lang === "fa" ? "rtl" : "ltr";
+      if (lang !== "en") {
+        root.classList.add("i18n-pending");
+        setTimeout(function () { root.classList.remove("i18n-pending"); }, 1500);
+      }
+    })();
+  </script>
+</head>
+<body data-page="progress">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="topbar">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="system">System default</button>
+      <button type="button" data-lang="en" lang="en" dir="ltr">English</button>
+      <button type="button" data-lang="fa" lang="fa" dir="rtl">فارسی</button>
+    </div>
+  </div>
+  <main class="guide" id="guide"></main>
+  <script src="guide.js"></script>
+</body>
+</html>

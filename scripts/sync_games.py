@@ -130,6 +130,29 @@ def publish_media(meta: dict, game_dir: Path, key: str) -> tuple[dict, dict[str,
     return published, copies
 
 
+def publish_guide(meta: dict, game_dir: Path) -> dict[str, Path]:
+    """Copy handbook stills to dream-home/media/<lang>/<name>.jpg. They are not the card's gallery."""
+    media = meta.get("guideMedia")
+    if not media:
+        return {}
+    if not isinstance(media, dict) or "en" not in media:
+        raise CatalogError(f"{meta['id']}: guideMedia needs an English (en) list")
+    copies = {}
+    for lang, rels in media.items():
+        if lang not in LANGUAGES or not isinstance(rels, list):
+            raise CatalogError(f"{meta['id']}: guideMedia.{lang} must be a list of paths")
+        for rel in rels:
+            src = game_dir / rel
+            if not src.is_file():
+                raise CatalogError(f"{meta['id']}: guide image not found: {rel}")
+            stem = src.stem.removeprefix("screenshot-")
+            if stem.endswith("-fa"):
+                stem = stem[:-3]
+            dest_rel = f"dream-home/media/{lang}/{stem}.jpg"
+            copies[dest_rel] = src
+    return copies
+
+
 def build_catalog(workspace: Path, site_dir: Path) -> tuple[dict, dict[str, Path]]:
     """Return the catalog and a {site-relative dest: source} map of media to copy."""
     entries, copies = [], {}
@@ -144,6 +167,9 @@ def build_catalog(workspace: Path, site_dir: Path) -> tuple[dict, dict[str, Path
             clips, clip_copies = publish_media(meta, game_dir, "clips")
             entry["clips"] = clips
             copies.update(clip_copies)
+        if meta.get("guide"):
+            entry["guide"] = meta["guide"]
+        copies.update(publish_guide(meta, game_dir))
         entries.append(entry)
     entries.sort(key=lambda g: (STATUSES.index(g["status"]), g["title"]["en"].lower()))
     return {"games": entries}, copies

@@ -38,7 +38,7 @@
       "tech": [
         "Kotlin",
         "Jetpack Compose",
-        "OpenGL ES"
+        "LibGDX"
       ],
       "highlights": {
         "en": [
@@ -59,7 +59,7 @@
       "accent": "#E0663A",
       "links": {},
       "version": "1.0.0",
-      "updated": "2026-10-06",
+      "updated": "2026-10-08",
       "screenshots": {
         "en": [
           "assets/games/dream-home/en/01-room.jpg",
